@@ -1,12 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+	useEffect(() => {
+		// On page load or when changing themes, best to add inline in `head` to avoid FOUC
+		if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.classList.remove('dark');
+		}
+
+		// Whenever the user explicitly chooses light mode
+		localStorage.theme = 'light';
+
+		// Whenever the user explicitly chooses dark mode
+		localStorage.theme = 'dark';
+
+		// Whenever the user explicitly chooses to respect the OS preference
+		localStorage.removeItem('theme');
+	}, []);
 
   return (
-    <div className="App">
+    <div className="App dark:bg-slate-800 dark:text-white">
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src="/vite.svg" className="logo" alt="Vite logo" />
